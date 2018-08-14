@@ -54,7 +54,7 @@ public class Scanner {
             case '!':
                 addToken(match('=') ? BANG_EQUAL : BANG);
                 break;
-            case '==':
+            case '=':
                 addToken(match('=') ? EQUAL_EQUAL : EQUAL);
                 break;
             case '<':
@@ -75,6 +75,80 @@ public class Scanner {
             case ' ': //Ignore
             case '\r':
             case '\t': break;
+            case '"':
+                string ();
+                break;
+            default:
+                if (isDigit (c)) {
+                    number ();
+                } else if (isAlpha (c)) {
+                    identifier ();
+                } else {
+                    Lox.error (line, "Unreconized charecter.");
+                }
+                break;
         }
     }
+
+    //HELPER METHODS
+
+    /**
+     *
+     */
+    private void identifier() {
+
+    }
+
+    /**
+     *
+     */
+    private void number() {
+
+    }
+
+    /**
+     *
+     */
+    private void string() {
+
+    }
+
+    private boolean match(char c) {
+        return false;
+    }
+
+    private char peek() {
+        return 'p';
+    }
+
+    private char peekNext() {
+
+        return 'c';
+    }
+
+    private boolean isDigit(char c) {
+        return false;
+    }
+
+    private boolean isAlpha(char c) {
+        return false;
+
+    }
+
+    private boolean isAtEnd() {
+        return false;
+    }
+
+    private void addToken(TokenType type) {
+
+    }
+
+    private void addToken(TokenType type, Object literal) {
+
+    }
+
+    private char advance() {
+        return 'c';
+    }
 }
+
