@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 public class Lox {
 
@@ -18,10 +19,7 @@ public class Lox {
             System.exit(64);
         } else if(args.length == 1) {
             runFile(args[0]);
-        } else {
-            runPrompt();
-        }
-
+        } else runPrompt ();
     }
 
     /**
@@ -53,14 +51,17 @@ public class Lox {
                     run(line);
                 }
             }
-
         }
-
-
     }
 
     private static void run(String source) {
-        System.out.println(source);
+        Scanner scanner = new Scanner (source);
+        List<Token> tokens = scanner.scanTokens ();
+
+        for (Token token : tokens) {
+            System.out.println (token);
+        }
+
 
     }
 

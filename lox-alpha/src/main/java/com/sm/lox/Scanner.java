@@ -1,7 +1,9 @@
 package com.sm.lox;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.sm.lox.TokenType.*;
 
@@ -12,6 +14,28 @@ public class Scanner {
     private int start; //start location
     private int current;
     private int line;
+
+    private static final Map<String, TokenType> keywords;
+
+    static {
+        keywords = new HashMap<> ();
+        keywords.put ("and", AND);
+        keywords.put ("class", CLASS);
+        keywords.put ("else", ELSE);
+        keywords.put ("false", FALSE);
+        keywords.put ("for", FOR);
+        keywords.put ("fun", FUN);
+        keywords.put ("if", IF);
+        keywords.put ("nil", NIL);
+        keywords.put ("or", OR);
+        keywords.put ("print", PRINT);
+        keywords.put ("return", RETURN);
+        keywords.put ("super", SUPER);
+        keywords.put ("this", THIS);
+        keywords.put ("true", TRUE);
+        keywords.put ("var", VAR);
+        keywords.put ("while", WHILE);
+    }
 
     Scanner(String source) {
         this.source = source;
@@ -96,14 +120,23 @@ public class Scanner {
      *
      */
     private void identifier() {
-
+        while (isAlphaNumeric (peek ())) advance ();
+        addToken (IDENTIFIER);
     }
 
     /**
      *
      */
     private void number() {
+        while (isDigit (peek ())) advance ();
 
+        //Look for the fractional part
+        if (peek () == '.' && isDigit (peekNext ())) {
+            advance ();
+            while (isDigit (peek ())) advance ();
+        }
+
+        addToken (NUMBER, Double.parseDouble (source.substring (start, current)));
     }
 
     /**
@@ -114,41 +147,56 @@ public class Scanner {
     }
 
     private boolean match(char c) {
-        return false;
+        if (isAtEnd ()) return false;
+        if (source.charAt (current) != c) return false;
+        current++;
+        return true;
     }
 
     private char peek() {
-        return 'p';
+        if (isAtEnd ()) return '\0';
+        return source.charAt (current);
+
     }
 
     private char peekNext() {
 
-        return 'c';
+        if (current + 1 >= source.length ()) return '\0';
+        return source.charAt (current + 1);
     }
 
     private boolean isDigit(char c) {
-        return false;
+        return (c >= '0' && c <= '9');
     }
 
     private boolean isAlpha(char c) {
-        return false;
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
 
+    }
+
+    private boolean isAlphaNumeric(char c) {
+        return (isAlpha (c) || isDigit (c));
     }
 
     private boolean isAtEnd() {
-        return false;
+        return current >= source.length ();
     }
 
+
     private void addToken(TokenType type) {
+        addToken (type, null);
 
     }
 
     private void addToken(TokenType type, Object literal) {
+        String text = source.substring (start, current);
+        tokens.add (new Token (type, text, literal, line));
 
     }
 
     private char advance() {
-        return 'c';
+        current++; // point current to the next token
+        return source.charAt (current - 1);
     }
 }
 
