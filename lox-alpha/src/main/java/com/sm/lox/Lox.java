@@ -9,40 +9,34 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Lox {
-
     static boolean hadError;
-
 
     public static void main(String[] args) throws IOException {
         if (args.length > 1) {
             System.out.println("Usage: jlox [script]");
             System.exit(64);
-        } else if(args.length == 1) {
+        } else if (args.length == 1) {
             runFile(args[0]);
-        } else runPrompt ();
+        } else runPrompt();
     }
-
     /**
-     *
      * @param path
      * @throws IOException
      */
     private static void runFile(String path) throws IOException {
 
         byte[] bytesRead = Files.readAllBytes(Paths.get(path));
-        run(new String(bytesRead, Charset.defaultCharset ()));
+        run(new String(bytesRead, Charset.defaultCharset()));
     }
 
     /**
-     *
      * @throws IOException
      */
-
     private static void runPrompt() throws IOException {
-        InputStreamReader input = new InputStreamReader (System.in);
-        try (BufferedReader reader = new BufferedReader (input)) {
+        InputStreamReader input = new InputStreamReader(System.in);
+        try (BufferedReader reader = new BufferedReader(input)) {
             //Run the repl
-            for(;;) {
+            for (; ; ) {
                 System.out.println("lox-repl> ");
                 String line = reader.readLine();
                 if (line.trim().equals("exit")) {
@@ -55,23 +49,22 @@ public class Lox {
     }
 
     private static void run(String source) {
-        Scanner scanner = new Scanner (source);
-        List<Token> tokens = scanner.scanTokens ();
+        Scanner scanner = new Scanner(source);
+        List<Token> tokens = scanner.scanTokens();
 
         for (Token token : tokens) {
-            System.out.println (token);
+            System.out.println(token);
         }
 
 
     }
 
     /**
-     *
      * @param line
      * @param msg
      */
     static void error(int line, String msg) {
-        report(line,"",msg);
+        report(line, "", msg);
 
     }
 
