@@ -8,6 +8,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+/**
+ *  Main scanner for the Lox programming language
+ */
 public class Lox {
     static boolean hadError;
 
